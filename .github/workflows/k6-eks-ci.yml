@@ -24,7 +24,7 @@ jobs:
     needs: init
     runs-on: ubuntu-latest
     outputs:
-      ecr_registry: ${{ steps.login-ecr.outputs.registry}}
+      ecr_registry: ${{ steps.login-ecr.outputs.registry }}
     steps:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
