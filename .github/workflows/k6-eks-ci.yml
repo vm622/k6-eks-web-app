@@ -14,11 +14,14 @@ permissions:
 
 jobs:
   init:
+    name: Init repository checkout
     runs-on: ubuntu-latest
     steps:
       - name: Check-out web-app repository
         uses: actions/checkout@v4
   aws_log_in:
+    name: Setup AWS
+    needs: init
     runs-on: ubuntu-latest
     steps:
       - name: Configure AWS credentials
@@ -32,6 +35,8 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
   image_build:
+    name: Build web-app image
+    needs: aws_log_in
     runs-on: ubuntu-latest
     steps:
       - name: Build, tag, and push web-app image to Amazon ECR
@@ -41,11 +46,15 @@ jobs:
           docker build -t $ECR_REGISTRY/${{ secrets.ECR_REPOSITORY }}:latest -f ./Dockerfile .
           docker push $ECR_REGISTRY/${{ secrets.ECR_REPOSITORY }}:latest
   EKS_setup:
+    name: Setup EKS
+    needs: image_build
     runs-on: ubuntu-latest
     steps:
       - name: Set up kube config for EKS
         run: aws eks update-kubeconfig --name ${{ secrets.EKS_CLUSTER_NAME }} --region ${{ secrets.AWS_REGION }}
   EKS_deploy:
+    name: Deploy manifests to EKS
+    needs: EKS_setup
     runs-on: ubuntu-latest
     steps:     
       - name: Remove old configmap for tests
