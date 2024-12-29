@@ -5,7 +5,6 @@ export const options = {
             vus: 800,
             duration: '5m',
             tags: { test_type: 'smoke'},
-            exec: 'rootRequest',
             gracefulStop: '5s'
         },
         loadTest: {
@@ -17,7 +16,6 @@ export const options = {
             ],
             startTime: '10m',
             tags: { test_type: 'load'},
-            exec: 'rootRequest',
         },
         stressTest: {
             executor: 'ramping-vus',
@@ -32,7 +30,6 @@ export const options = {
             ],
             startTime: '22m',
             tags: { test_type: 'stress'},
-            exec: 'rootRequest',
         },
         spikeTest: {
             executor: 'ramping-vus',
@@ -43,7 +40,6 @@ export const options = {
             ],
             startTime: '35m',
             tags: { test_type: 'spike'},
-            exec: 'rootRequest',
         },
         breakpointTest: {
             executor: 'ramping-vus',
@@ -53,7 +49,6 @@ export const options = {
             ],
             startTime: '45m',
             tags: { test_type: 'breakpoint'},
-            exec: 'rootRequest',
         },
         soakTest: {
             executor: 'ramping-vus',
@@ -64,14 +59,13 @@ export const options = {
             ],
             startTime: '80m',
             tags: { test_type: 'soak'},
-            exec: 'rootRequest',
         }
     },
     thresholds: {
         'http_req_duration{test_type:smoke}': [
             {
                 "threshold": 'avg<500',
-                "abortOnFail": true
+                "abortOnFail": false
             }
         ],
         'http_req_duration{test_type:load}': [
